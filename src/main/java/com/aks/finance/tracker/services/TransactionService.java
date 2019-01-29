@@ -38,4 +38,24 @@ public class TransactionService {
                                       .transactionCode(transaction.getTransactionCode())
                                       .build();
     }
+
+    public Optional<TransactionResponseBean> getTransaction(Long id) {
+        Optional<Transaction> optionalTransaction = transactionRepository.findById(id);
+
+        if(!optionalTransaction.isPresent()) {
+            return Optional.empty();
+        } else {
+            Transaction transaction = optionalTransaction.get();
+            return Optional.of(TransactionResponseBean
+                                   .builder()
+                                   .transactionCode(transaction.getTransactionCode())
+                                   .id(transaction.getId())
+                                   .transactionCategory(transaction.getTransactionCategory())
+                                   .amount(transaction.getAmount())
+                                   .transactionType(transaction.getTransactionType())
+                                   .date(transaction.getDate())
+                                   .build());
+        }
+    }
+
 }

@@ -2,6 +2,7 @@ package com.aks.finance.tracker.repositories.impl;
 
 import static java.util.Objects.isNull;
 
+import com.aks.finance.tracker.beans.TransactionResponseBean;
 import com.aks.finance.tracker.enums.TransactionCategory;
 import com.aks.finance.tracker.models.Transaction;
 import com.aks.finance.tracker.enums.TransactionType;
