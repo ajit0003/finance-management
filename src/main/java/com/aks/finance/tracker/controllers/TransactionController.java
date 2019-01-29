@@ -1,21 +1,12 @@
 package com.aks.finance.tracker.controllers;
 
-import static java.util.Objects.isNull;
-
+import com.aks.finance.tracker.beans.CategoryResponseBean;
 import com.aks.finance.tracker.beans.TransactionRequestBean;
 import com.aks.finance.tracker.beans.TransactionResponseBean;
+import com.aks.finance.tracker.services.CategoryService;
 import com.aks.finance.tracker.services.TransactionService;
-import com.google.common.collect.Maps;
-import java.time.Month;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import java.util.Optional;
 import javax.validation.Valid;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,24 +18,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
 
     private TransactionService transactionService;
+    private CategoryService categoryService;
 
-    @Autowired
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(TransactionService transactionService, CategoryService categoryService) {
         this.transactionService = transactionService;
+        this.categoryService = categoryService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public TransactionResponseBean createTransaction(@Valid @RequestBody TransactionRequestBean requestBean) {
-        return transactionService.createTransaction(requestBean);
+    public ResponseEntity<?> createTransaction(@Valid @RequestBody TransactionRequestBean requestBean) {
+        Optional<CategoryResponseBean> optCatBean = categoryService.findByName(requestBean.getCategory());
+        if(!optCatBean.isPresent()) {
+            return ResponseEntity.badRequest().body("Category provided does not exist.");
+        } else {
+            requestBean.setCategoryId(optCatBean.get().getId());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.createTransaction(requestBean));
     }
 
     @GetMapping("/{id}")

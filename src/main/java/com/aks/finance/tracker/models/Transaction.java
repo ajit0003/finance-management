@@ -26,6 +26,6 @@ public class Transaction {
 
     private Double amount;
 
-    private Category category;
+    private Long categoryId;
 }
 

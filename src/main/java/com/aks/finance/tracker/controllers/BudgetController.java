@@ -4,7 +4,10 @@ import static java.util.Objects.isNull;
 
 import com.aks.finance.tracker.beans.BudgetRequestBean;
 import com.aks.finance.tracker.beans.BudgetResponseBean;
+import com.aks.finance.tracker.beans.CategoryResponseBean;
 import com.aks.finance.tracker.services.BudgetService;
+import com.aks.finance.tracker.services.CategoryService;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,17 +27,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class BudgetController {
 
     private BudgetService budgetService;
+    private CategoryService categoryService;
 
     @Autowired
-    public BudgetController(BudgetService budgetService) {
+    public BudgetController(BudgetService budgetService, CategoryService categoryService) {
         this.budgetService = budgetService;
+        this.categoryService = categoryService;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public BudgetResponseBean createBudget(@Valid @RequestBody BudgetRequestBean budgetRequestBean) {
-        return budgetService.createBudget(budgetRequestBean);
+    public ResponseEntity<?> createBudget(@Valid @RequestBody BudgetRequestBean budgetRequestBean) {
+        Optional<CategoryResponseBean> optCatBean = categoryService.findByName(budgetRequestBean.getBudgetCategory());
+        if(!optCatBean.isPresent()) {
+            return ResponseEntity.badRequest().body("Category provided does not exist.");
+        } else {
+            budgetRequestBean.setCategoryId(optCatBean.get().getId());
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(budgetService.createBudget(budgetRequestBean));
     }
 
     @GetMapping("/progress")

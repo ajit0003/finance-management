@@ -1,5 +1,6 @@
 package com.aks.finance.tracker.beans;
 
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,13 +22,15 @@ public class BudgetProgressResponseBean {
 
     private Double totalBalance;
 
-    private Double entertainmentBalance;
+//    private Double entertainmentBalance;
+//
+//    private Double foodBalance;
+//
+//    private Double miscellaneousBalance;
+//
+//    private Double travelBalance;
+//
+//    private Double medicalBalance;
 
-    private Double foodBalance;
-
-    private Double miscellaneousBalance;
-
-    private Double travelBalance;
-
-    private Double medicalBalance;
+    private Map<String, Double> categoryBalance;
 }

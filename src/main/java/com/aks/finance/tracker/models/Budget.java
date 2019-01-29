@@ -22,7 +22,7 @@ public class Budget {
 
     private Year budgetYear;
 
-    private Category budgetCategory;
+    private Long categoryId;
 
     private Long id;
 }

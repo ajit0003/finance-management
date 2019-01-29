@@ -1,7 +1,6 @@
-package com.aks.finance.tracker.beans;
+package com.aks.finance.tracker.models;
 
 import com.aks.finance.tracker.enums.Month;
-import com.aks.finance.tracker.enums.Category;
 import java.time.Year;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,20 +10,19 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class BudgetResponseBean {
+public class Expenditure {
 
-    private Double budgetAmt;
+    private Long id;
 
-    private Month budgetMonth;
+    private Year year;
 
-    private Year budgetYear;
-
-    private String category;
+    private Month month;
 
     private Long categoryId;
 
-    private Long id;
+    private Double amount;
+
 }

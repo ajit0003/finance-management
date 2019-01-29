@@ -2,8 +2,13 @@ package com.aks.finance.tracker.services;
 
 import com.aks.finance.tracker.beans.TransactionRequestBean;
 import com.aks.finance.tracker.beans.TransactionResponseBean;
+import com.aks.finance.tracker.enums.Month;
+import com.aks.finance.tracker.enums.TransactionType;
+import com.aks.finance.tracker.models.Expenditure;
 import com.aks.finance.tracker.models.Transaction;
+import com.aks.finance.tracker.repositories.ExpenditureRepository;
 import com.aks.finance.tracker.repositories.TransactionRepository;
+import java.time.Year;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -12,9 +17,11 @@ import org.springframework.stereotype.Service;
 public class TransactionService {
 
     private TransactionRepository transactionRepository;
+    private ExpenditureRepository expenditureRepository;
 
-    public TransactionService(TransactionRepository transactionRepository) {
+    public TransactionService(TransactionRepository transactionRepository, ExpenditureRepository expenditureRepository) {
         this.transactionRepository = transactionRepository;
+        this.expenditureRepository = expenditureRepository;
     }
 
     public TransactionResponseBean createTransaction(TransactionRequestBean requestBean) {
@@ -24,16 +31,43 @@ public class TransactionService {
                                              .transactionType(requestBean.getTransactionType())
                                              .amount(requestBean.getAmount())
                                              .transactionCode(UUID.randomUUID().toString())
-                                             .category(requestBean.getCategory())
+                                             .categoryId(requestBean.getCategoryId())
                                              .build();
 
         transaction = transactionRepository.save(transaction);
+
+        Optional<Expenditure> optionalExpenditure = expenditureRepository.findExpenditure(transaction.getCategoryId(),
+                                                                                          transaction.getDate().getMonth().getValue(),
+                                                                                          transaction.getDate().getYear());
+
+        if(optionalExpenditure.isPresent()) {
+            Expenditure expenditure = optionalExpenditure.get();
+            double totalExpenditure = expenditure.getAmount();
+            if(transaction.getTransactionType() == TransactionType.CREDIT) {
+                totalExpenditure -= transaction.getAmount();
+            } else {
+                totalExpenditure += transaction.getAmount();
+            }
+            expenditure.setAmount(totalExpenditure);
+            expenditureRepository.updateExpenditure(expenditure);
+        } else {
+            double amount = transaction.getTransactionType() == TransactionType.CREDIT
+                            ? transaction.getAmount() *(-1)
+                            : transaction.getAmount();
+            Expenditure expenditure = Expenditure.builder()
+                                                 .month(Month.fromValue(transaction.getDate().getMonth().getValue()))
+                                                 .year(Year.of(transaction.getDate().getYear()))
+                                                 .amount(amount)
+                                                 .categoryId(transaction.getCategoryId())
+                                                 .build();
+            expenditureRepository.createExpenditure(expenditure);
+        }
 
         return TransactionResponseBean.builder()
                                       .transactionType(transaction.getTransactionType())
                                       .date(transaction.getDate())
                                       .amount(transaction.getAmount())
-                                      .category(transaction.getCategory())
+                                      .categoryId(transaction.getCategoryId())
                                       .id(transaction.getId())
                                       .transactionCode(transaction.getTransactionCode())
                                       .build();
@@ -50,7 +84,7 @@ public class TransactionService {
                                    .builder()
                                    .transactionCode(transaction.getTransactionCode())
                                    .id(transaction.getId())
-                                   .category(transaction.getCategory())
+                                   .categoryId(transaction.getCategoryId())
                                    .amount(transaction.getAmount())
                                    .transactionType(transaction.getTransactionType())
                                    .date(transaction.getDate())

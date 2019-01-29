@@ -4,15 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.aks.finance.tracker.beans.CategoryResponseBean;
 import com.aks.finance.tracker.beans.TransactionRequestBean;
 import com.aks.finance.tracker.beans.TransactionResponseBean;
+import com.aks.finance.tracker.enums.Category;
 import com.aks.finance.tracker.enums.TransactionType;
 import com.aks.finance.tracker.models.Transaction;
+import com.aks.finance.tracker.services.CategoryService;
 import com.aks.finance.tracker.services.TransactionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,6 +45,9 @@ public class TransactionControllerTest {
     @MockBean
     private TransactionService transactionService;
 
+    @MockBean
+    private CategoryService categoryService;
+
     @Autowired
     MockMvc mockMvc;
 
@@ -51,6 +58,7 @@ public class TransactionControllerTest {
                                                             .amount(20d)
                                                             .transactionType(TransactionType.DEBIT)
                                                             .date(LocalDateTime.of(2019, 1, 28, 9, 00))
+                                                            .category("Food")
                                                             .build();
 
         TransactionResponseBean responseBean = TransactionResponseBean.builder()
@@ -62,6 +70,15 @@ public class TransactionControllerTest {
         doReturn(responseBean)
             .when(transactionService)
             .createTransaction(any(TransactionRequestBean.class));
+
+        CategoryResponseBean catResponseBean = CategoryResponseBean.builder()
+                                                                   .category("Food")
+                                                                   .id(1L)
+                                                                   .build();
+
+        doReturn(catResponseBean)
+            .when(categoryService)
+            .findByName(eq("Food"));
 
         ResultActions resultActions = mockMvc.perform(post("/transaction")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -79,6 +96,7 @@ public class TransactionControllerTest {
                   () -> assertEquals(responseBean.getAmount(), actualResponseBean.getAmount(), 0),
                   () -> assertEquals(responseBean.getDate(), actualResponseBean.getDate()),
                   () -> assertEquals(responseBean.getTransactionType(), actualResponseBean.getTransactionType()),
+                  () -> assertEquals(responseBean.getCategoryId(), actualResponseBean.getCategoryId()),
                   () -> assertNotNull(actualResponseBean.getTransactionCode()));
 
     }

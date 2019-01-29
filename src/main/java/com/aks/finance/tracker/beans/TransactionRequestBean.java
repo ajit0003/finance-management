@@ -41,5 +41,8 @@ public class TransactionRequestBean {
     private Double amount;
 
     @NotNull
-    private Category category;
+    private String category;
+
+    //@NotNull
+    private Long categoryId;
 }

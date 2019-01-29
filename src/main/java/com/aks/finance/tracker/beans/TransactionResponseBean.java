@@ -32,5 +32,5 @@ public class TransactionResponseBean {
 
     private Long id;
 
-    private Category category;
+    private Long categoryId;
 }

@@ -2,7 +2,6 @@ package com.aks.finance.tracker.repositories.impl;
 
 import static java.util.Objects.isNull;
 
-import com.aks.finance.tracker.enums.Category;
 import com.aks.finance.tracker.enums.Month;
 import com.aks.finance.tracker.models.Budget;
 import com.aks.finance.tracker.repositories.BudgetRepository;
@@ -36,7 +35,7 @@ public class BudgetRepositoryImpl implements BudgetRepository {
         parameters.put("budget_amt", budget.getBudgetAmount());
         parameters.put("budget_month", budget.getBudgetMonth().getMonth());
         parameters.put("budget_year", budget.getBudgetYear().getValue());
-        parameters.put("budget_category", budget.getBudgetCategory().getCategory());
+        parameters.put("category_id", budget.getCategoryId());
 
         Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
         budget.setId(id);
@@ -51,7 +50,7 @@ public class BudgetRepositoryImpl implements BudgetRepository {
                 return Budget
                     .builder()
                     .budgetAmount(rs.getDouble("budget_amt"))
-                    .budgetCategory(Category.fromValue(rs.getString("budget_category")))
+                    .categoryId(rs.getLong("category_id"))
                     .budgetMonth(Month.fromValue(rs.getInt("budget_month")))
                     .budgetYear(Year.of(rs.getInt("budget_year")))
                     .id(rs.getLong("id"))
@@ -69,7 +68,7 @@ public class BudgetRepositoryImpl implements BudgetRepository {
         return jdbcTemplate.query("SELECT * FROM budgets WHERE budget_month = ? AND budget_year= ?", new Object[]{month, year}, (rs, rowNum) -> {
             return Budget.builder()
                          .budgetAmount(rs.getDouble("budget_amt"))
-                         .budgetCategory(Category.fromValue(rs.getString("budget_category")))
+                         .categoryId(rs.getLong("category_id"))
                          .budgetMonth(Month.fromValue(rs.getInt("budget_month")))
                          .budgetYear(Year.of(rs.getInt("budget_year")))
                          .build();

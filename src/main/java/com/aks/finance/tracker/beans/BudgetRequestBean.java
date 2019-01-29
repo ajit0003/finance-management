@@ -29,5 +29,8 @@ public class BudgetRequestBean {
     private Year budgetYear;
 
     @NotNull
-    private Category budgetCatergory;
+    private String budgetCategory;
+
+    //@NotNull
+    private Long categoryId;
 }

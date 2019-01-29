@@ -13,6 +13,7 @@ import com.aks.finance.tracker.beans.TransactionRequestBean;
 import com.aks.finance.tracker.beans.TransactionResponseBean;
 import com.aks.finance.tracker.enums.TransactionType;
 import com.aks.finance.tracker.models.Transaction;
+import com.aks.finance.tracker.repositories.ExpenditureRepository;
 import com.aks.finance.tracker.repositories.TransactionRepository;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -28,11 +29,14 @@ public class TransactionServiceTest {
     @MockBean
     private TransactionRepository transactionRepository;
 
+    @MockBean
+    private ExpenditureRepository expenditureRepository;
+
     private TransactionService transactionService;
 
     @BeforeEach
     public void init() {
-        this.transactionService = new TransactionService(transactionRepository);
+        this.transactionService = new TransactionService(transactionRepository, expenditureRepository);
     }
 
     @Test
