@@ -3,13 +3,11 @@ package com.aks.finance.tracker.controllers;
 import static java.util.Objects.isNull;
 
 import com.aks.finance.tracker.beans.BudgetRequestBean;
-import com.aks.finance.tracker.beans.BudgetResponseBean;
 import com.aks.finance.tracker.beans.CategoryResponseBean;
 import com.aks.finance.tracker.services.BudgetService;
 import com.aks.finance.tracker.services.CategoryService;
 import java.util.Optional;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +27,6 @@ public class BudgetController {
     private BudgetService budgetService;
     private CategoryService categoryService;
 
-    @Autowired
     public BudgetController(BudgetService budgetService, CategoryService categoryService) {
         this.budgetService = budgetService;
         this.categoryService = categoryService;

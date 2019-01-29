@@ -23,7 +23,6 @@ public class BudgetService {
     private ExpenditureRepository expenditureRepository;
     private CategoryRepository categoryRepository;
 
-    @Autowired
     public BudgetService(BudgetRepository budgetRepository,
                          ExpenditureRepository expenditureRepository,
                          CategoryRepository categoryRepository) {

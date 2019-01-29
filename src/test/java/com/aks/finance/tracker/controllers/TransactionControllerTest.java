@@ -13,9 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.aks.finance.tracker.beans.CategoryResponseBean;
 import com.aks.finance.tracker.beans.TransactionRequestBean;
 import com.aks.finance.tracker.beans.TransactionResponseBean;
-import com.aks.finance.tracker.enums.Category;
 import com.aks.finance.tracker.enums.TransactionType;
-import com.aks.finance.tracker.models.Transaction;
 import com.aks.finance.tracker.services.CategoryService;
 import com.aks.finance.tracker.services.TransactionService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -65,6 +63,7 @@ public class TransactionControllerTest {
                                                                       .amount(bean.getAmount())
                                                                       .date(bean.getDate())
                                                                       .transactionType(bean.getTransactionType())
+                                                                      .transactionCode(UUID.randomUUID().toString())
                                                                       .build();
 
         doReturn(responseBean)
@@ -76,7 +75,7 @@ public class TransactionControllerTest {
                                                                    .id(1L)
                                                                    .build();
 
-        doReturn(catResponseBean)
+        doReturn(Optional.of(catResponseBean))
             .when(categoryService)
             .findByName(eq("Food"));
 
@@ -93,7 +92,7 @@ public class TransactionControllerTest {
         TransactionResponseBean actualResponseBean = parseJson(jsonResult, TransactionResponseBean.class);
 
         assertAll("Create Transaction Response",
-                  () -> assertEquals(responseBean.getAmount(), actualResponseBean.getAmount(), 0),
+                  () -> assertEquals(responseBean.getAmount(), actualResponseBean.getAmount(), 0.00001),
                   () -> assertEquals(responseBean.getDate(), actualResponseBean.getDate()),
                   () -> assertEquals(responseBean.getTransactionType(), actualResponseBean.getTransactionType()),
                   () -> assertEquals(responseBean.getCategoryId(), actualResponseBean.getCategoryId()),
