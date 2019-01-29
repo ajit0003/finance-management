@@ -28,7 +28,7 @@ public class TransactionResponseBean {
 
     private String transactionCode;
 
-    private float amount;
+    private Double amount;
 
     private Long id;
 

@@ -5,9 +5,15 @@ import static java.util.Objects.isNull;
 import com.aks.finance.tracker.beans.TransactionRequestBean;
 import com.aks.finance.tracker.beans.TransactionResponseBean;
 import com.aks.finance.tracker.services.TransactionService;
+import com.google.common.collect.Maps;
+import java.time.Month;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,25 +34,16 @@ import org.springframework.web.server.ResponseStatusException;
 public class TransactionController {
 
     private TransactionService transactionService;
-    private Validator validator;
 
     @Autowired
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
-        this.validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public TransactionResponseBean createTransaction(@RequestBody TransactionRequestBean requestBean) {
-        Set<ConstraintViolation<TransactionRequestBean>> violations = validator.validate(requestBean);
-        if(!violations.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                                              "Please provide valid Transaction details.",
-                                              new ConstraintViolationException(violations));
-        }
-
+    public TransactionResponseBean createTransaction(@Valid @RequestBody TransactionRequestBean requestBean) {
         return transactionService.createTransaction(requestBean);
     }
 
@@ -54,12 +51,9 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ResponseEntity<?> getTransaction(@PathVariable Long id) {
-        if(isNull(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-
         return transactionService.getTransaction(id)
                                  .map(ResponseEntity::ok)
                                  .orElse(ResponseEntity.notFound().build());
     }
+
 }

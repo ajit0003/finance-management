@@ -48,7 +48,7 @@ public class TransactionControllerTest {
     @DisplayName("POST /transaction")
     public void testCreateTransaction() throws Exception {
         TransactionRequestBean bean = TransactionRequestBean.builder()
-                                                            .amount(20f)
+                                                            .amount(20d)
                                                             .transactionType(TransactionType.DEBIT)
                                                             .date(LocalDateTime.of(2019, 1, 28, 9, 00))
                                                             .build();

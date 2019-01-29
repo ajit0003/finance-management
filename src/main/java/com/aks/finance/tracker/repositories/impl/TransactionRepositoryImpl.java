@@ -71,7 +71,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                     .id(rs.getLong("id"))
                     .transactionType(TransactionType.fromValue(rs.getString("transaction_type")))
                     .transactionCode(rs.getString("transaction_code"))
-                    .amount(rs.getBigDecimal("transaction_amount").floatValue())
+                    .amount(rs.getDouble("transaction_amount"))
                     .date(rs.getTimestamp("transaction_date").toLocalDateTime())
                     .transactionCategory(TransactionCategory.fromValue(rs.getString("transaction_category")))
                     .build();
@@ -84,15 +84,15 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     @Override
-    public List<Transaction> findByMonth(Integer month) {
-        return jdbcTemplate.query("SELECT * FROM transactions WHERE MONTH(transaction_date) = ?", new Object[] {month},
+    public List<Transaction> findByMonthAndYear(Integer month, Integer year) {
+        return jdbcTemplate.query("SELECT * FROM transactions WHERE MONTH(transaction_date) = ? AND YEAR(transaction_date) = ?", new Object[] {month, year},
         (rs, rowNum) -> {
             return Transaction
                 .builder()
                 .id(rs.getLong("id"))
                 .transactionType(TransactionType.fromValue(rs.getString("transaction_type")))
                 .transactionCode(rs.getString("transaction_code"))
-                .amount(rs.getBigDecimal("transaction_amount").floatValue())
+                .amount(rs.getDouble("transaction_amount"))
                 .date(rs.getTimestamp("transaction_date").toLocalDateTime())
                 .transactionCategory(TransactionCategory.fromValue(rs.getString("transaction_category")))
                 .build();

@@ -38,7 +38,7 @@ public class TransactionRequestBean {
 
     @NotNull
     @Positive
-    private float amount;
+    private Double amount;
 
     @NotNull
     private TransactionCategory transactionCategory;

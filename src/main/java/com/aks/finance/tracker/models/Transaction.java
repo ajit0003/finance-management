@@ -24,7 +24,7 @@ public class Transaction {
 
     private String transactionCode;
 
-    private float amount;
+    private Double amount;
 
     private TransactionCategory transactionCategory;
 }
