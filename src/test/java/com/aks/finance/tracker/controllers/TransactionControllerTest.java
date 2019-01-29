@@ -59,9 +59,9 @@ public class TransactionControllerTest {
                                                                       .transactionType(bean.getTransactionType())
                                                                       .build();
 
-        doReturn(Optional.of(responseBean))
+        doReturn(responseBean)
             .when(transactionService)
-            .createTransaction(any(Transaction.class));
+            .createTransaction(any(TransactionRequestBean.class));
 
         ResultActions resultActions = mockMvc.perform(post("/transaction")
         .contentType(MediaType.APPLICATION_JSON_UTF8)

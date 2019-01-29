@@ -1,6 +1,8 @@
 package com.aks.finance.tracker.beans;
 
+import com.aks.finance.tracker.enums.TransactionCategory;
 import com.aks.finance.tracker.enums.TransactionType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -31,9 +33,13 @@ public class TransactionRequestBean {
     @PastOrPresent
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime date;
 
     @NotNull
     @Positive
     private float amount;
+
+    @NotNull
+    private TransactionCategory transactionCategory;
 }

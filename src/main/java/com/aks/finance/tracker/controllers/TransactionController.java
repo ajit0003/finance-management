@@ -8,7 +8,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/transaction")
@@ -37,11 +37,12 @@ public class TransactionController {
     public TransactionResponseBean createTransaction(@RequestBody TransactionRequestBean requestBean) {
 
         Set<ConstraintViolation<TransactionRequestBean>> violations = validator.validate(requestBean);
-
         if(!violations.isEmpty()) {
-            throw new ConstraintViolationException(violations);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                                              "Please provide valid Transaction details.",
+                                              new ConstraintViolationException(violations));
         }
 
-        return TransactionResponseBean.builder().build();
+        return transactionService.createTransaction(requestBean);
     }
 }

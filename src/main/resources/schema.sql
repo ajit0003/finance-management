@@ -4,5 +4,6 @@ CREATE TABLE IF NOT EXISTS transactions (
     transaction_type VARCHAR(10) NOT NULL,
     transaction_code VARCHAR(50) NOT NULL,
     transaction_amount DECIMAL NOT NULL,
+    transaction_category VARCHAR(50) NOT NULL,
     PRIMARY KEY(id)
 );
