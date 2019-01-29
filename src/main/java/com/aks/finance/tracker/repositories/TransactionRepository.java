@@ -12,5 +12,5 @@ public interface TransactionRepository {
 
     Optional<Transaction> findById(Long id);
 
-    List<Transaction> findByMonth(Integer month);
+    List<Transaction> findByMonthAndYear(Integer month, Integer year);
 }

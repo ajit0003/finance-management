@@ -1,8 +1,8 @@
 package com.aks.finance.tracker.models;
 
 import com.aks.finance.tracker.enums.Category;
-import com.aks.finance.tracker.enums.TransactionType;
-import java.time.LocalDateTime;
+import com.aks.finance.tracker.enums.Month;
+import java.time.Year;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,18 +14,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Transaction {
-    
-    private Long id;
+public class Budget {
 
-    private TransactionType transactionType;
+    private Double budgetAmount;
 
-    private LocalDateTime date;
+    private Month budgetMonth;
 
-    private String transactionCode;
-
-    private Double amount;
+    private Year budgetYear;
 
     private Long categoryId;
-}
 
+    private Long id;
+}
