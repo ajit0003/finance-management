@@ -2,11 +2,11 @@ package com.aks.finance.tracker.repositories.impl;
 
 import static java.util.Objects.isNull;
 
-import com.aks.finance.tracker.enums.TransactionCategory;
+import com.aks.finance.tracker.enums.Category;
+import com.aks.finance.tracker.enums.Month;
 import com.aks.finance.tracker.models.Budget;
 import com.aks.finance.tracker.repositories.BudgetRepository;
 import com.google.common.collect.Maps;
-import java.time.Month;
 import java.time.Year;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class BudgetRepositoryImpl implements BudgetRepository {
     public Budget save(Budget budget) {
         Map<String, Object> parameters = Maps.newHashMap();
         parameters.put("budget_amt", budget.getBudgetAmount());
-        parameters.put("budget_month", budget.getBudgetMonth().getValue());
+        parameters.put("budget_month", budget.getBudgetMonth().getMonth());
         parameters.put("budget_year", budget.getBudgetYear().getValue());
         parameters.put("budget_category", budget.getBudgetCategory().getCategory());
 
@@ -47,13 +47,14 @@ public class BudgetRepositoryImpl implements BudgetRepository {
     @Override
     public Optional<Budget> findById(Long id) {
         try {
-            Budget budget = jdbcTemplate.queryForObject("SELECT * FROM transactions WHERE id = ?", new Object[]{id}, (rs, rowNum) -> {
+            Budget budget = jdbcTemplate.queryForObject("SELECT * FROM budgets WHERE id = ?", new Object[]{id}, (rs, rowNum) -> {
                 return Budget
                     .builder()
                     .budgetAmount(rs.getDouble("budget_amt"))
-                    .budgetCategory(TransactionCategory.fromValue(rs.getString("budget_category")))
-                    .budgetMonth(Month.of(rs.getInt("budget_month")))
+                    .budgetCategory(Category.fromValue(rs.getString("budget_category")))
+                    .budgetMonth(Month.fromValue(rs.getInt("budget_month")))
                     .budgetYear(Year.of(rs.getInt("budget_year")))
+                    .id(rs.getLong("id"))
                     .build();
                 });
 
@@ -68,8 +69,8 @@ public class BudgetRepositoryImpl implements BudgetRepository {
         return jdbcTemplate.query("SELECT * FROM budgets WHERE budget_month = ? AND budget_year= ?", new Object[]{month, year}, (rs, rowNum) -> {
             return Budget.builder()
                          .budgetAmount(rs.getDouble("budget_amt"))
-                         .budgetCategory(TransactionCategory.fromValue(rs.getString("budget_category")))
-                         .budgetMonth(Month.of(rs.getInt("budget_month")))
+                         .budgetCategory(Category.fromValue(rs.getString("budget_category")))
+                         .budgetMonth(Month.fromValue(rs.getInt("budget_month")))
                          .budgetYear(Year.of(rs.getInt("budget_year")))
                          .build();
         });

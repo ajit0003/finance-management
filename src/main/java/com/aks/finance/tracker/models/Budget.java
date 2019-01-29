@@ -1,7 +1,7 @@
 package com.aks.finance.tracker.models;
 
-import com.aks.finance.tracker.enums.TransactionCategory;
-import java.time.Month;
+import com.aks.finance.tracker.enums.Category;
+import com.aks.finance.tracker.enums.Month;
 import java.time.Year;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +22,7 @@ public class Budget {
 
     private Year budgetYear;
 
-    private TransactionCategory budgetCategory;
+    private Category budgetCategory;
 
     private Long id;
 }

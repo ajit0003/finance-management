@@ -1,6 +1,6 @@
 package com.aks.finance.tracker.beans;
 
-import com.aks.finance.tracker.enums.TransactionCategory;
+import com.aks.finance.tracker.enums.Category;
 import com.aks.finance.tracker.enums.TransactionType;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -32,5 +32,5 @@ public class TransactionResponseBean {
 
     private Long id;
 
-    private TransactionCategory transactionCategory;
+    private Category category;
 }

@@ -13,7 +13,7 @@ import lombok.Setter;
 @Builder
 public class BudgetProgressResponseBean {
 
-    private String month;
+    private Integer month;
 
     private Integer year;
 

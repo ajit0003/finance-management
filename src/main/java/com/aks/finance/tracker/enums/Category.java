@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum TransactionCategory {
+public enum Category {
 
     MEDICAL("Medical"),
     ENTERTAINMENT("Entertainment"),
@@ -17,10 +17,10 @@ public enum TransactionCategory {
     private String category;
 
     @JsonCreator
-    public static TransactionCategory fromValue(String value) {
-        for(TransactionCategory transactionCategory : TransactionCategory.values()) {
-            if(transactionCategory.getCategory().equalsIgnoreCase(value)) {
-                return transactionCategory;
+    public static Category fromValue(String value) {
+        for(Category category : Category.values()) {
+            if(category.getCategory().equalsIgnoreCase(value)) {
+                return category;
             }
         }
 

@@ -1,7 +1,7 @@
 package com.aks.finance.tracker.beans;
 
-import com.aks.finance.tracker.enums.TransactionCategory;
-import java.time.Month;
+import com.aks.finance.tracker.enums.Month;
+import com.aks.finance.tracker.enums.Category;
 import java.time.Year;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +22,7 @@ public class BudgetResponseBean {
 
     private Year budgetYear;
 
-    private TransactionCategory budgetCatergory;
+    private Category budgetCatergory;
 
     private Long id;
 }

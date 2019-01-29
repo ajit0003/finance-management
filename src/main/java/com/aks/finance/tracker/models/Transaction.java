@@ -1,6 +1,6 @@
 package com.aks.finance.tracker.models;
 
-import com.aks.finance.tracker.enums.TransactionCategory;
+import com.aks.finance.tracker.enums.Category;
 import com.aks.finance.tracker.enums.TransactionType;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -26,6 +26,6 @@ public class Transaction {
 
     private Double amount;
 
-    private TransactionCategory transactionCategory;
+    private Category category;
 }
 

@@ -2,8 +2,7 @@ package com.aks.finance.tracker.repositories.impl;
 
 import static java.util.Objects.isNull;
 
-import com.aks.finance.tracker.beans.TransactionResponseBean;
-import com.aks.finance.tracker.enums.TransactionCategory;
+import com.aks.finance.tracker.enums.Category;
 import com.aks.finance.tracker.models.Transaction;
 import com.aks.finance.tracker.enums.TransactionType;
 import com.aks.finance.tracker.repositories.TransactionRepository;
@@ -37,7 +36,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         parameters.put("transaction_code", transaction.getTransactionCode());
         parameters.put("transaction_amount", transaction.getAmount());
         parameters.put("transaction_date", transaction.getDate());
-        parameters.put("transaction_category", transaction.getTransactionCategory().getCategory());
+        parameters.put("transaction_category", transaction.getCategory().getCategory());
 
         Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
         transaction.setId(id);
@@ -54,7 +53,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         transaction.getTransactionCode(),
         transaction.getAmount(),
         transaction.getDate(),
-        transaction.getTransactionCategory().getCategory(),
+        transaction.getCategory().getCategory(),
         transaction.getId()) == 1;
     }
 
@@ -73,7 +72,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                     .transactionCode(rs.getString("transaction_code"))
                     .amount(rs.getDouble("transaction_amount"))
                     .date(rs.getTimestamp("transaction_date").toLocalDateTime())
-                    .transactionCategory(TransactionCategory.fromValue(rs.getString("transaction_category")))
+                    .category(Category.fromValue(rs.getString("transaction_category")))
                     .build();
             });
 
@@ -94,7 +93,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
                 .transactionCode(rs.getString("transaction_code"))
                 .amount(rs.getDouble("transaction_amount"))
                 .date(rs.getTimestamp("transaction_date").toLocalDateTime())
-                .transactionCategory(TransactionCategory.fromValue(rs.getString("transaction_category")))
+                .category(Category.fromValue(rs.getString("transaction_category")))
                 .build();
         });
     }

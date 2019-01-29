@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,19 +37,10 @@ public class BudgetController {
         return budgetService.createBudget(budgetRequestBean);
     }
 
-    @GetMapping
+    @GetMapping("/progress")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ResponseEntity<?> getBudget(@PathVariable Long id) {
-        return budgetService.findById(id)
-                            .map(ResponseEntity::ok)
-                            .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/progress?month={month}&year={year}")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public ResponseEntity<?> getProgress(@PathVariable("month") Integer month, @PathVariable("year") Integer year) {
+    public ResponseEntity<?> getProgress(@RequestParam("month") Integer month, @RequestParam("year") Integer year) {
         if(isNull(month) || isNull(year) || month <= 0 || year <= 0) {
             return ResponseEntity.badRequest().body("Please provide a valid month and year as an Integer.");
         }
@@ -57,4 +49,14 @@ public class BudgetController {
                             .map(ResponseEntity::ok)
                             .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ResponseEntity<?> getBudget(@PathVariable Long id) {
+        return budgetService.findById(id)
+                            .map(ResponseEntity::ok)
+                            .orElse(ResponseEntity.notFound().build());
+    }
+
 }

@@ -24,7 +24,7 @@ public class TransactionService {
                                              .transactionType(requestBean.getTransactionType())
                                              .amount(requestBean.getAmount())
                                              .transactionCode(UUID.randomUUID().toString())
-                                             .transactionCategory(requestBean.getTransactionCategory())
+                                             .category(requestBean.getCategory())
                                              .build();
 
         transaction = transactionRepository.save(transaction);
@@ -33,7 +33,7 @@ public class TransactionService {
                                       .transactionType(transaction.getTransactionType())
                                       .date(transaction.getDate())
                                       .amount(transaction.getAmount())
-                                      .transactionCategory(transaction.getTransactionCategory())
+                                      .category(transaction.getCategory())
                                       .id(transaction.getId())
                                       .transactionCode(transaction.getTransactionCode())
                                       .build();
@@ -50,7 +50,7 @@ public class TransactionService {
                                    .builder()
                                    .transactionCode(transaction.getTransactionCode())
                                    .id(transaction.getId())
-                                   .transactionCategory(transaction.getTransactionCategory())
+                                   .category(transaction.getCategory())
                                    .amount(transaction.getAmount())
                                    .transactionType(transaction.getTransactionType())
                                    .date(transaction.getDate())

@@ -1,6 +1,6 @@
 package com.aks.finance.tracker.beans;
 
-import com.aks.finance.tracker.enums.TransactionCategory;
+import com.aks.finance.tracker.enums.Category;
 import com.aks.finance.tracker.enums.TransactionType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -41,5 +41,5 @@ public class TransactionRequestBean {
     private Double amount;
 
     @NotNull
-    private TransactionCategory transactionCategory;
+    private Category category;
 }

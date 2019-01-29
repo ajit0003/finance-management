@@ -1,7 +1,7 @@
 package com.aks.finance.tracker.beans;
 
-import com.aks.finance.tracker.enums.TransactionCategory;
-import java.time.Month;
+import com.aks.finance.tracker.enums.Month;
+import com.aks.finance.tracker.enums.Category;
 import java.time.Year;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
@@ -29,5 +29,5 @@ public class BudgetRequestBean {
     private Year budgetYear;
 
     @NotNull
-    private TransactionCategory budgetCatergory;
+    private Category budgetCatergory;
 }
